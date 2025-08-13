@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AA.Modules.DataRepo", "Assembly\AA.Modules.DataRepo.csproj", "{B4130833-3FE3-40D1-BF08-E0726AB82581}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AA.Modules.DataRepo.Tests", "Tests\AA.Modules.DataRepo.Tests.csproj", "{1AB23791-BEAB-4653-A0CA-A90BE48B1F70}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AA.Modules.DataRepo.xUnit", "xUnit\AA.Modules.DataRepo.xUnit.csproj", "{EA293852-4C14-46ED-A3CE-257F9A863FC1}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AA.Modules.DataRepo.Src", "Src\AA.Modules.DataRepo.Src.shproj", "{0041CCCB-95AD-46B4-8FE1-5AAAC05F57D1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4130833-3FE3-40D1-BF08-E0726AB82581}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4130833-3FE3-40D1-BF08-E0726AB82581}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4130833-3FE3-40D1-BF08-E0726AB82581}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4130833-3FE3-40D1-BF08-E0726AB82581}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AB23791-BEAB-4653-A0CA-A90BE48B1F70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AB23791-BEAB-4653-A0CA-A90BE48B1F70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AB23791-BEAB-4653-A0CA-A90BE48B1F70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AB23791-BEAB-4653-A0CA-A90BE48B1F70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA293852-4C14-46ED-A3CE-257F9A863FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA293852-4C14-46ED-A3CE-257F9A863FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA293852-4C14-46ED-A3CE-257F9A863FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA293852-4C14-46ED-A3CE-257F9A863FC1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {825B170C-0BAA-41F9-82A2-46479495B4DF}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Src\AA.Modules.DataRepo.Src.projitems*{0041cccb-95ad-46b4-8fe1-5aaac05f57d1}*SharedItemsImports = 13
+		Src\AA.Modules.DataRepo.Src.projitems*{1ab23791-beab-4653-a0ca-a90be48b1f70}*SharedItemsImports = 5
+		Src\AA.Modules.DataRepo.Src.projitems*{b4130833-3fe3-40d1-bf08-e0726ab82581}*SharedItemsImports = 5
+	EndGlobalSection
+EndGlobal
