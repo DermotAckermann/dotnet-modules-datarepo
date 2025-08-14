@@ -19,7 +19,8 @@ public class DataRepo
 
     //***Methods public
 
-    public void CreateKey(string key, RepoValueType type, string? passDelete = null, string? passWrite = null, string? passRead = null, bool typeEnforcement = false)
+    public void CreateKey(string key, RepoValueType type, string? passDelete = null, string? passWrite = null, string? passRead = null, 
+        bool typeEnforcement = false)
     {
         RepoValueBase valueObj = type switch
         {
