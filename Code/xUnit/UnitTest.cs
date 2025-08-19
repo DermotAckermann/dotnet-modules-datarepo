@@ -14,7 +14,6 @@ public class DataRepoTests
         
     }
 
-
     [Fact]
     public void DR001_Initialize_EmptyRepository()
     {
@@ -209,7 +208,7 @@ public class DataRepoTests
         Assert.Contains("a.z", keys);
     }
 
-    /*
+    /*DR020
     [Fact]
     public void DR020_AddArrayElement_Works()
     {
@@ -317,16 +316,17 @@ public class DataRepoTests
     public void DR029_CreateFromJson_BuildsKeysAndValues()
     {
         var repo = new DataRepo();
-        string json = "{ \"cfg\": { \"a\": 1, \"b\": \"x\" }, \"enabled\": true }";
+        //string json = "{ \"cfg\": { \"a\": 1, \"b\": \"x\" }, \"enabled\": true }";
+        var json = File.ReadAllText("D:\\Work Jean\\CatLoggerEasy Git\\CATLoggerEasy\\Code\\TestFiles\\DeviceConfigSample.json");
         repo.CreateFromJson(json);
         var keys = repo.GetAll().Select(entry => entry.Key).ToList();
-        Assert.Contains("cfg.a", keys);
-        Assert.Contains("cfg.b", keys);
-        Assert.Contains("enabled", keys);
+        Assert.Contains("slave_device_config.[0].vendor_id", keys);
+        Assert.Contains("slave_device_config.[0].slave_types.[0].device_config.[1].subindex", keys);
+        Assert.Contains("slave_device_config.[0].predefined_data.[2].default", keys);
 
-        Assert.Equal("1", repo.ReadKeyString("cfg.a"));
-        Assert.Equal("x", repo.ReadKeyString("cfg.b"));
-        Assert.Equal("True", repo.ReadKeyString("enabled"));
+        Assert.Equal("2", repo.ReadKeyString("slave_device_config.[0].vendor_id"));
+        Assert.Equal("0x01", repo.ReadKeyString("slave_device_config.[0].slave_types.[0].device_config.[1].subindex"));
+        Assert.Equal("1", repo.ReadKeyString("slave_device_config.[0].predefined_data.[2].default"));
     }
 
     private class Consumer : IRepoConsumer
@@ -347,7 +347,7 @@ public class DataRepoTests
     }
 
     [Fact]
-    public void WriteKeyMulti_Writes_All_Values()
+    public void DR031_WriteKeyMulti_Writes_All_Values()
     {
         var repo = new DataRepo();
         repo.CreateKey("a", RepoValueType.Integer);
@@ -367,7 +367,7 @@ public class DataRepoTests
     }
 
     [Fact]
-    public void WriteKeyMulti_Respects_Write_Password()
+    public void DR032_WriteKeyMulti_Respects_Write_Password()
     {
         var repo = new DataRepo();
         // create protected keys
@@ -385,7 +385,7 @@ public class DataRepoTests
     }
 
     [Fact]
-    public void SetKeyNullMulti_Clears_All_Specified_Keys()
+    public void DR033_SetKeyNullMulti_Clears_All_Specified_Keys()
     {
         var repo = new DataRepo();
         repo.CreateAndWriteKey("k1", RepoValueType.String, "v1");
@@ -400,7 +400,7 @@ public class DataRepoTests
     }
 
     [Fact]
-    public void FindKeysWithWildcards_Basic_And_Nested()
+    public void DR034_FindKeysWithWildcards_Basic_And_Nested()
     {
         var repo = new DataRepo();
         repo.CreateKey("cfg.a", RepoValueType.Integer);
@@ -422,7 +422,7 @@ public class DataRepoTests
     }
 
     [Fact]
-    public void GetEntityIds_Matches_Keys_Built_With_AppendKeyEntityId()
+    public void DR035_GetEntityIds_Matches_Keys_Built_With_AppendKeyEntityId()
     {
         var repo = new DataRepo();
         // Build keys like: devices.{A1}.status
