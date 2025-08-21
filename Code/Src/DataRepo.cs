@@ -95,6 +95,14 @@ public class DataRepo
         return obj;
     }
 
+    public IEnumerable<(string key, object value)> ReadKeyMulti(string? readPass = null)
+    {
+        foreach(var entry in _data)
+        {
+            yield return (entry.Key, entry.Value);
+        }
+    }
+
     public String ReadKeyString(string key, string? pass = null)
     {
         var repoValue = ReadKey(key, pass);

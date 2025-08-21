@@ -11,7 +11,7 @@ namespace AA.Modules.DataRepoModule.Tests;
 
 public static class DataRepoTests
 {
-
+    private static uint entries = 100000;
 
     public static void RunAll()
     {
@@ -23,48 +23,71 @@ public static class DataRepoTests
 
     public static void Test1()
     {
-        var repo = CreateTestRepoEntries(100000);
+        var repo = CreateMultipleKeys(entries);
+        WriteMultipleKeys(repo, entries);
+        var values = ReadMultipleKeys(repo);
+        var all = GetAllKeys(repo);
     }
 
-    public static DataRepo CreateTestRepoEntries(int entries)
+    public static DataRepo CreateMultipleKeys(uint entries)
     {
         var repo = new DataRepo();
 
-        
-        var swTotal = Stopwatch.StartNew();
+        var keyList = new List<(string, RepoValueType)>();
         for (int i = 0; i < entries; i++)
         {
             string key = $"Test.Key.{i}";
             var type = RepoValueType.String;
-            string value = $"Value {i}";
-
-            repo.CreateAndWriteKey(key, type, value);
-
+            keyList.Add((key, type));
         }
 
-        swTotal.Stop();
-        Console.WriteLine($"Total Time CreateAndWriteKey * {entries}: {swTotal.ElapsedMilliseconds} ms");
+        var sw = Stopwatch.StartNew();
+        repo.CreateKeyMulti(keyList);
+        sw.Stop();
 
-
-        swTotal.Restart();
-        for (int i = 0; i < entries; i++)
-        {
-            repo.WriteKey($"Test.Key.{i}", $"Updated {i}");
-        }
-        swTotal.Stop();
-        Console.WriteLine($"Total Time WriteKey * {entries}: {swTotal.ElapsedMilliseconds} ms");
-
-        swTotal.Restart();
-        for (int i = 0; i < entries; i++)
-        {
-            var value = repo.ReadKey($"Test.Key.{i}");
-        }
-        swTotal.Stop();
-        Console.WriteLine($"Total Time ReadKey * {entries}: {swTotal.ElapsedMilliseconds} ms");
-
+        Console.WriteLine($"Total Time Create Multi Keys ({entries}): {sw.ElapsedMilliseconds} ms");
 
         return repo;
     }
+
+    public static void WriteMultipleKeys(DataRepo repo, uint entries)
+    {
+        var keyValueList = new List<(string, object)>();
+        for (int i = 0; i < entries; i++)
+        {
+            keyValueList.Add(($"Test.Key.{i}", $"Updated {i}"));
+        }
+
+        var sw = Stopwatch.StartNew();
+        repo.WriteKeyMulti(keyValueList);
+        sw.Stop();
+
+        Console.WriteLine($"Total Time Write Multi Keys ({entries}): {sw.ElapsedMilliseconds} ms");
+    }
+
+    public static IEnumerable<(string Key, RepoValueBase Value)> GetAllKeys(DataRepo repo)
+    {
+        var sw = Stopwatch.StartNew();
+        var all = repo.GetAll().ToList();
+        sw.Stop();
+
+        Console.WriteLine($"Total Time to Get All ({all.Count} entries): {sw.ElapsedMilliseconds} ms");
+        return all;
+    }
+
+    public static IEnumerable<(string key, object value)> ReadMultipleKeys(DataRepo repo)
+    {
+        var sw = Stopwatch.StartNew();
+
+        var values = repo.ReadKeyMulti().ToList();
+
+        sw.Stop();
+
+        Console.WriteLine($"Total Time Read Multi Keys ({values.Count}): {sw.ElapsedMilliseconds} ms");
+
+        return values;
+    }
+
 
 }
 
