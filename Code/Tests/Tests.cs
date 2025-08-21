@@ -15,13 +15,13 @@ public static class DataRepoTests
 
     public static void RunAll()
     {
-        Test1();
+        TimeTest();
 
         Console.WriteLine("");
     }
 
 
-    public static void Test1()
+    public static void TimeTest()
     {
         var repo = CreateMultipleKeys(entries);
         WriteMultipleKeys(repo, entries);
@@ -45,7 +45,7 @@ public static class DataRepoTests
         repo.CreateKeyMulti(keyList);
         sw.Stop();
 
-        Console.WriteLine($"Total Time Create Multi Keys ({entries}): {sw.ElapsedMilliseconds} ms");
+        Console.WriteLine($"Total Time Create Multi Keys ({entries} entries): {sw.ElapsedMilliseconds} ms");
 
         return repo;
     }
@@ -62,7 +62,7 @@ public static class DataRepoTests
         repo.WriteKeyMulti(keyValueList);
         sw.Stop();
 
-        Console.WriteLine($"Total Time Write Multi Keys ({entries}): {sw.ElapsedMilliseconds} ms");
+        Console.WriteLine($"Total Time Write Multi Keys ({entries} entries): {sw.ElapsedMilliseconds} ms");
     }
 
     public static IEnumerable<(string Key, RepoValueBase Value)> GetAllKeys(DataRepo repo)
@@ -83,7 +83,7 @@ public static class DataRepoTests
 
         sw.Stop();
 
-        Console.WriteLine($"Total Time Read Multi Keys ({values.Count}): {sw.ElapsedMilliseconds} ms");
+        Console.WriteLine($"Total Time Read Multi Keys ({values.Count} entries): {sw.ElapsedMilliseconds} ms");
 
         return values;
     }
