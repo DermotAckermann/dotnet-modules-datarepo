@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Xml.Linq;
+using System.Text.RegularExpressions;
 
 namespace AA.Modules.DataRepoModule;
 
@@ -22,6 +23,9 @@ public class DataRepo
     public void CreateKey(string key, RepoValueType type, string? passDelete = null, string? passWrite = null, string? passRead = null, 
         bool typeEnforcement = false)
     {
+        if (string.IsNullOrWhiteSpace(key))
+            throw new ArgumentNullException("Key cannot be null or empty.", nameof(key));
+
         RepoValueBase valueObj = type switch
         {
             RepoValueType.Integer => new RepoValueInteger(),
@@ -46,6 +50,9 @@ public class DataRepo
 
     public void CreateKeyMulti(IEnumerable<(string key, RepoValueType type)> entryData, string? passDelete = null, string? passWrite = null, string? passRead = null, bool typeEnforcement = false)
     {
+        if(entryData == null || !entryData.Any())
+            throw new ArgumentException("Data cannot be null or empty.", nameof(entryData));
+
         foreach (var (key, type) in entryData)
         {
             CreateKey(key, type, passDelete, passWrite, passRead, typeEnforcement);
@@ -63,6 +70,9 @@ public class DataRepo
 
     public void CreateAndWriteKeyMulti(IEnumerable<(string key, RepoValueType type, object value)> entryData, string? deleteAndWritePass = null, bool typeEnforcement = false)
     {
+        if(entryData == null || !entryData.Any())
+            throw new ArgumentException("Data cannot be null or empty.", nameof(entryData));
+
         foreach (var (key, type, value) in entryData)
         {
             CreateKey(key, type, deleteAndWritePass, deleteAndWritePass, null, typeEnforcement);
@@ -122,6 +132,9 @@ public class DataRepo
 
     public void WriteKeyMulti(IEnumerable<(string key, object value)> writeData, string? writePass = null)
     {
+        if(writePass == null || !writeData.Any())
+            throw new ArgumentException("Data cannot be null or empty.", nameof(writeData));
+
         foreach (var (key, value) in writeData)
         {
             WriteKey(key, value, writePass);
@@ -170,6 +183,8 @@ public class DataRepo
 
     public IEnumerable<(string Key, RepoValueBase Value)> GetAll()
     {
+        if(_data == null || _data.Count == 0)
+            throw new ArgumentException("Data Repository is null or empty",nameof(_data));
         foreach (var kvp in _data)
         {
             yield return (kvp.Key, kvp.Value);
@@ -180,6 +195,9 @@ public class DataRepo
     {
         if (string.IsNullOrEmpty(filter))
             throw new ArgumentException("Filter cannot be null or empty.", nameof(filter));
+
+        if (_data == null || _data.Count == 0)
+            throw new ArgumentException("Data Repository is null or empty", nameof(_data));
 
         foreach (var key in _data.Keys)
         {
@@ -195,11 +213,14 @@ public class DataRepo
         if (string.IsNullOrEmpty(wildcardFilter))
             throw new ArgumentException("Filter cannot be null or empty.", nameof(wildcardFilter));
 
+        if (_data == null || _data.Count == 0)
+            throw new ArgumentException("Data Repository is null or empty", nameof(_data));
+
         // Escape all regex special chars, then replace * with .*
-        string pattern = "^" + System.Text.RegularExpressions.Regex.Escape(wildcardFilter)
+        string pattern = "^" + Regex.Escape(wildcardFilter)
             .Replace("\\*", ".*") + "$";
 
-        var regex = new System.Text.RegularExpressions.Regex(pattern, System.Text.RegularExpressions.RegexOptions.Compiled);
+        var regex = new Regex(pattern, RegexOptions.Compiled);
 
         foreach (var key in _data.Keys)
         {
@@ -214,6 +235,8 @@ public class DataRepo
     {
         if (string.IsNullOrEmpty(baseKey))
             throw new ArgumentException("Base key cannot be null or empty.", nameof(baseKey));
+        if (_data == null || _data.Count == 0)
+            throw new ArgumentException("Data Repository is null or empty", nameof(_data));
 
         var entityIds = new HashSet<string>();
 
@@ -241,6 +264,9 @@ public class DataRepo
         if (!baseKeyWithBrackets.EndsWith(".[]"))
             throw new ArgumentException("Base key must end with .[] to indicate array placeholder.", nameof(baseKeyWithBrackets));
 
+        if (_data == null || _data.Count == 0)
+            throw new ArgumentException("Data Repository is null or empty", nameof(_data));
+
         string baseKey = baseKeyWithBrackets.Substring(0, baseKeyWithBrackets.Length - 3); // remove ".[]"
 
         // Regex: ^<baseKey>\.\[(\d+)\]
@@ -266,6 +292,9 @@ public class DataRepo
     {
         if (string.IsNullOrWhiteSpace(baseKey))
             throw new ArgumentException("Base key cannot be null or empty.", nameof(baseKey));
+
+        if (_data == null || _data.Count == 0)
+            throw new ArgumentException("Data Repository is null or empty", nameof(_data));
 
         string prefix = baseKey.TrimEnd('.') + ".";
         int baseLength = prefix.Length;
@@ -299,6 +328,9 @@ public class DataRepo
         if (string.IsNullOrWhiteSpace(arrayKeyTemplate))
             throw new ArgumentException("Array key template cannot be null or empty.", nameof(arrayKeyTemplate));
 
+        if (_data == null)
+            throw new ArgumentNullException("Data Repository cannot be null", nameof(_data));
+
         // Expect template to include: "[]."
         const string marker = "[].";
         int markerIndex = arrayKeyTemplate.IndexOf(marker, StringComparison.Ordinal);
@@ -310,8 +342,8 @@ public class DataRepo
         string suffix = arrayKeyTemplate.Substring(markerIndex + marker.Length); // after "[]."
 
         // Regex to find existing indices
-        string pattern = $"^{System.Text.RegularExpressions.Regex.Escape(baseKey)}\\.\\[(\\d+)\\]\\.{System.Text.RegularExpressions.Regex.Escape(suffix)}$";
-        var regex = new System.Text.RegularExpressions.Regex(pattern, System.Text.RegularExpressions.RegexOptions.Compiled);
+        string pattern = $"^{Regex.Escape(baseKey)}\\.\\[(\\d+)\\]\\.{Regex.Escape(suffix)}$";
+        var regex = new Regex(pattern, RegexOptions.Compiled);
 
         int maxIndex = -1;
         foreach (var key in _data.Keys)

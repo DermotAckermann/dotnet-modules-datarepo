@@ -15,11 +15,19 @@ public static class DataRepoTests
 
     public static void RunAll()
     {
-        TimeTest();
+        //TimeTest();
+
+        Test1();
 
         Console.WriteLine("");
     }
 
+    public static void Test1()
+    {
+        var repo = new DataRepo();
+
+        var a = DataRepo.AppendKeyEntityId(null, null, false);
+    }
 
     public static void TimeTest()
     {
