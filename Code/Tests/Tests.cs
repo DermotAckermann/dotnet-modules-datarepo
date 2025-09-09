@@ -26,7 +26,9 @@ public static class DataRepoTests
     {
         var repo = new DataRepo();
 
-        var a = DataRepo.AppendKeyEntityId(null, null, false);
+        repo.CreateKey("h", RepoValueType.String);
+
+        var all = repo.GetAll().ToList();
     }
 
     public static void TimeTest()
